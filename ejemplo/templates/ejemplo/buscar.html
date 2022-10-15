@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>buscar familiar por nombre</h1>
+
+    <form action="/buscar-familiar/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if not lista_familiares %}
+     <h2>No hay familiares con ese nombre</h2>
+    {% endif %}
+    
+    {% for familiar in lista_familiares %}
+    <ul>
+        <li> Nombre: {{familiar.nombre}}, Dirección: {{familiar.direccion}}, Pasaporte: {{familiar.numero_pasaporte}}</li>
+    </ul>
+    {% endfor %}
+    
+
+
+</body>
+</html>
