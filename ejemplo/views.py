@@ -2,6 +2,10 @@ from django.shortcuts import render
 from ejemplo.models import Familiar
 from ejemplo.forms import Buscar, FamiliarForm
 from django.views import View 
+from django.urls import reverse
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic.edit import FormView
+
 
 def index(request):
     suma = 1 + 1
@@ -81,3 +85,34 @@ class AltaFamiliar(View):
                                                         'msg_exito': msg_exito})
         
         return render(request, self.template_name, {"form": form})
+
+
+class FamiliarList(ListView):
+    model = Familiar
+
+class FamiliaresBuscar(View):
+    model = Familiar
+    template_name = "ejemplo/familiar_buscar.html"
+
+    def get(self, request):
+        nombre = request.GET.get('nombre')
+        object_list = self.model.objects.all()
+        if nombre:
+            object_list = self.model.objects.filter(nombre__icontains=nombre)
+        return render(request, self.template_name, {'object_list': object_list})
+
+class FamiliarCrear(CreateView):
+    model = Familiar
+    success_url = "/panel-familia"
+    fields = ["nombre", "direccion", "numero_pasaporte"]
+
+class FamiliarBorrar(DeleteView):
+    model = Familiar
+    success_url = "/panel-familia"
+
+class FamiliarActualizar(UpdateView):
+    model = Familiar
+    success_url = "/panel-familia"
+    fields = ["nombre", "direccion", "numero_pasaporte"]
+
+
